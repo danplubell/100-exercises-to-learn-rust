@@ -13,25 +13,26 @@
 // You don't have to though: it's perfectly okay to write three separate
 // implementations manually. Venture further only if you're curious.
 trait Power<EXP = Self> {
-    type Output;
-    fn power(&self, n: EXP) -> Self::Output;
+    type Target;
+    fn power(&self,n: EXP) -> Self::Target;
 }
 impl Power<u32> for u32 {
-    type Output = u32;
-    fn power(&self, n: u32) -> u32 {
-        self ^ n
+    type Target = u32;
+    fn power(&self, exp: u32 ) -> Self::Target {
+        self.pow(exp)
+    }
+}
+
+impl Power<&u32> for u32 {
+    type Target = u32;
+    fn power(&self, exp: &u32 ) -> Self::Target {
+        self.power(*exp)
     }
 }
 impl Power<u16> for u32 {
-    type Output = u32;
-    fn power(&self, n: u16) -> Self::Output {
-        self ^ n as u32
-    }
-}
-impl Power<&u32> for u32 {
-    type Output = u32;
-    fn power(&self, n: &u32) -> Self::Output {
-        self ^ n
+    type Target = u32;
+    fn power(&self, exp: u16) -> Self::Target {
+        self.pow(exp.into())
     }
 }
 #[cfg(test)]
