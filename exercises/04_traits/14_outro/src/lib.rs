@@ -8,3 +8,46 @@
 //   It should be possible to print its debug representation.
 //
 // Tests are located in the `tests` folder—pay attention to the visibility of your types and methods.
+
+#[derive(Debug, PartialOrd, PartialEq)]
+pub struct SaturatingU16 {
+    value: u16
+}
+impl SaturatingU16 {
+    fn new(value: u16) -> Self { Self { value }}
+}
+// conversions
+impl From<u16> for SaturatingU16 {
+    fn from(value: u16) -> Self {
+        SaturatingU16::new(value)
+    }
+}
+impl From<u8> for SaturatingU16 {
+    fn from(value: u8) -> Self {
+        SaturatingU16::new(value as u16)
+    }
+}
+impl From<&u16> for SaturatingU16 {
+    fn from(value: &u16) -> Self {
+        SaturatingU16::new(*value)
+    }
+}
+impl From<&u8> for SaturatingU16 {
+    fn from(value: &u8) -> Self {
+        SaturatingU16::new(*value as u16)
+    }
+}
+// addition
+trait Add<RHS = Self> {
+    type Target;
+    fn add(self,rhs: RHS) -> Self::Target;
+}
+impl Add<SaturatingU16> for SaturatingU16 {
+    type Target = SaturatingU16;
+    fn add(self, rhs: SaturatingU16) -> Self::Target {
+        SaturatingU16::new(self.value.saturating_add(rhs.value))
+    }
+} 
+// compare
+
+
